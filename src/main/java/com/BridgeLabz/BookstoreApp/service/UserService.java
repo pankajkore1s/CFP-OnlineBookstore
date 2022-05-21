@@ -2,11 +2,13 @@ package com.BridgeLabz.BookstoreApp.service;
 
 import com.BridgeLabz.BookstoreApp.dto.UserDTO;
 import com.BridgeLabz.BookstoreApp.entity.User;
+import com.BridgeLabz.BookstoreApp.exception.BookException;
 import com.BridgeLabz.BookstoreApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService{
@@ -30,4 +32,24 @@ public class UserService implements IUserService{
         List<User> getUsers= userRepository.findAll();
         return getUsers;
     }
+
+    @Override
+    public User updateRecordById(Integer id, UserDTO userDTO) {
+        return null;
+    }
+
+    @Override
+    public User updateRecordById(Long id, UserDTO userDTO) {
+//        Integer id= util.decodeToken(token);
+        Optional<User> addressBook = userRepository.findById(id);
+        if(addressBook.isPresent()) {
+            User newBook = new User(id,userDTO);
+            userRepository.save(newBook);
+
+            return newBook;
+
+        }
+        throw new BookException("User Details for id not found");
+    }
+
 }

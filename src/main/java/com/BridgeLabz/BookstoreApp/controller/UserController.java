@@ -37,9 +37,22 @@ public class UserController {
 //        return new ResponseEntity(dto,HttpStatus.OK);
 //    }
 
+    @PostMapping("/register")
+    public ResponseEntity<ResponseDTO> addUserInBookStore(@RequestBody UserDTO userDTO){
+        String newUser= String.valueOf(userService.addUser(userDTO));
+        ResponseDTO responseDTO=new ResponseDTO("User Registered Successfully",newUser);
+        return new ResponseEntity(responseDTO, HttpStatus.CREATED);
+    }
+
     @GetMapping("/getuser")
     public List<User> getAllContacts(){
 
         return userRepository.findAll();
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateRecordById(@PathVariable Integer id,@RequestBody UserDTO userDTO){
+        User entity = userService.updateRecordById(id,userDTO);
+        ResponseDTO dto = new ResponseDTO("User Record updated successfully",entity);
+        return new ResponseEntity(dto,HttpStatus.ACCEPTED);
     }
 }

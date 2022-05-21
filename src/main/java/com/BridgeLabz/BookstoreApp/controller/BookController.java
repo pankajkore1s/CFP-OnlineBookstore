@@ -32,4 +32,23 @@ public class BookController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
+    @GetMapping(value = "/getById/{BookId}")
+    public ResponseEntity<String> getBookDataById(@PathVariable Integer BookId) {
+        Book Book = bookService.getBookDataById(BookId);
+        ResponseDTO dto = new ResponseDTO("Data retrieved successfully by id (:",Book);
+        return new ResponseEntity(dto,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{BookId}")
+    public ResponseEntity<String> deleteRecordById(@PathVariable Integer BookId){
+        ResponseDTO dto = new ResponseDTO("Book Record deleted successfully", bookService.deleteRecordById(BookId));
+        return new ResponseEntity(dto,HttpStatus.OK);
+    }
+
+    @PutMapping("/updateBookById/{BookId}")
+    public ResponseEntity<String> updateRecordById(@PathVariable Integer BookId,@RequestBody BookDTO bookDTO){
+        Book updateRecord = bookService.updateRecordById(BookId,bookDTO);
+        ResponseDTO dto = new ResponseDTO(" Book Record updated successfully by Id",updateRecord);
+        return new ResponseEntity(dto,HttpStatus.ACCEPTED);
+    }
 }

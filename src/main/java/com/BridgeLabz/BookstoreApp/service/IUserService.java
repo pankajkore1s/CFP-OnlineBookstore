@@ -11,4 +11,7 @@ public interface IUserService {
 
     List<User> getAllUsers();
 
+    User updateRecordById(Integer id, UserDTO userDTO);
+
+    User updateRecordById(Long id, UserDTO userDTO);
 }
