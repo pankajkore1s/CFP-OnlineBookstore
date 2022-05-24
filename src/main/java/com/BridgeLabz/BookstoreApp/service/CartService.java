@@ -20,19 +20,16 @@ import java.util.Optional;
 @Slf4j
 public class CartService implements ICartService {
     @Autowired
-    static
     BookRepository bookRepository;
 
     @Autowired
-    static
     UserRepository userRepository;
 
     @Autowired
-    static
     CartRepository cartRepository;
 
     @Override
-    public static Cart insertItems(CartDTO cartdto) {
+    public Cart insertItems(CartDTO cartdto) {
         Optional<Book> book = bookRepository.findById(cartdto.getBookId());
         Optional<User> user= userRepository.findById(cartdto.getUserId());
         if (book.isPresent() && user.isPresent()) {
@@ -48,7 +45,7 @@ public class CartService implements ICartService {
     @Override
     public ResponseDTO getCartDetails() {
         List<Cart> getCartDetails=cartRepository.findAll();
-        ResponseDTO dto= new ResponseDTO(dto);
+        ResponseDTO dto= new ResponseDTO();
         if (getCartDetails.isEmpty()){
             String message=" Not found Any Cart details ";
             dto.setMessage(message);
@@ -59,6 +56,64 @@ public class CartService implements ICartService {
             dto.setMessage("the list of cart items is sucussfully retrived");
             dto.setData(getCartDetails);
             return dto;
+        }
+    }
+
+    @Override
+    public Cart getCartDetailsById(Integer cartId) {
+        Optional<Cart> getCartData=cartRepository.findById(cartId);
+        if (getCartData.isPresent()){
+            return getCartData.get();
+        }
+        else {
+            throw new BookException(" Didn't find any record for this particular cartId");
+        }
+    }
+
+    public Cart getCartRecordByBookId(Integer bookId) {
+        Optional<Cart> cart = cartRepository.findByBookId(bookId);
+        if(cart.isPresent()) {
+            log.info("Cart record retrieved successfully for book id "+bookId);
+            return cart.get();
+
+        }
+        else {
+            return null;
+            //throw new BookStoreException("Cart Record doesn't exists");
+        }
+    }
+
+    @Override
+    public Cart deleteCartItemById(Integer cartId) {
+        Optional<Cart> deleteData=cartRepository.findById(cartId);
+        if (deleteData.isPresent()){
+            cartRepository.deleteById(cartId);
+            return deleteData.get();
+        }
+        else {
+            throw new BookException(" Did not get any cart for specific cart id ");
+        }
+
+    }
+
+    @Override
+    public Cart updateRecordById(Integer cartId, CartDTO cartDTO) {
+        Optional<Cart> cart = cartRepository.findById(cartId);
+        Optional<Book>  book = bookRepository.findById(cartDTO.getBookId());
+        Optional<User> user = userRepository.findById(cartDTO.getUserId());
+        if(cart.isPresent()) {
+            if(book.isPresent() && user.isPresent()) {
+                Cart newCart = new Cart(cartId, user.get(),book.get(), cartDTO.getQuantity());
+                cartRepository.save(newCart);
+                log.info("Cart record updated successfully for id "+cartId);
+                return newCart;
+            }
+            else {
+                throw new BookException("Book or User doesn't exists");
+            }
+        }
+        else {
+            throw new BookException("Cart Record doesn't exists");
         }
     }
 

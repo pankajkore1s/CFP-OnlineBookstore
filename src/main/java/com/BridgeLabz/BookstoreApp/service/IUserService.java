@@ -13,5 +13,4 @@ public interface IUserService {
 
     User updateRecordById(Integer id, UserDTO userDTO);
 
-    User updateRecordById(Long id, UserDTO userDTO);
 }

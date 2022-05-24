@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IOrderService {
 
-//    public Order insertOrder(OrderDTO orderdto);
+    public Order insertOrder(OrderDTO orderDTO);
 
     public List<Order> getAllOrderRecords();
 
@@ -15,5 +15,4 @@ public interface IOrderService {
 
     public Order cancelOrder(Integer id);
 
-    public Order insertOrder(OrderDTO orderdto);
 }

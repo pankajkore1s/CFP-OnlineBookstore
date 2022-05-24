@@ -28,18 +28,9 @@ public class BookService implements IBookService{
         return getBooks;
     }
 
-    @Override
-    public Book getBookDataById(Integer bookId) {
-        return null;
-    }
 
     @Override
-    public Object deleteRecordById(Integer bookId) {
-        return null;
-    }
-
-    @Override
-    public Book getBookDataById(int BookId) {
+    public Book getBookDataById(Integer BookId) {
         Optional<Book> getBook=bookRepository.findById(BookId);
         if(getBook.isPresent()){
             return getBook.get();
@@ -51,21 +42,18 @@ public class BookService implements IBookService{
 
     @Override
     public Book updateRecordById(Integer bookId, BookDTO bookDTO) {
-
         Optional<Book> updateBook = bookRepository.findById(bookId);
         if (updateBook.isPresent()) {
             Book updateUser = new Book(bookId,bookDTO);
             bookRepository.save(updateUser);
             return updateUser;
-
         } else {
-
             throw new BookException("Book record does not found");
         }
     }
 
     @Override
-    public String deleteRecordById(int BookId) {
+    public String deleteRecordById(Integer BookId) {
         Optional<Book> newBook = bookRepository.findById(BookId);
         if (newBook.isPresent()) {
             bookRepository.deleteById(BookId);

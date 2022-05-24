@@ -15,15 +15,6 @@ public interface IBookService {
 
     Object deleteRecordById(Integer bookId);
 
-//    Book getBookDataById(int BookId);
-
-    Book getBookDataById(int BookId);
-
     Book updateRecordById(Integer bookId, BookDTO bookDTO);
 
-    String deleteRecordById(int BookId);
-
-//    Book getBookDataById(int BookId);
-//
-//    String deleteRecordById(int BookId);
 }

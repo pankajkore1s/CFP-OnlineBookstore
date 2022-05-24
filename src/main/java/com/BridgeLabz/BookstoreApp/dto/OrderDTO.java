@@ -11,4 +11,7 @@ public class OrderDTO {
     private Integer bookId;
     private Long id;
 
+    public Integer getUserId() {
+        return null;
+    }
 }

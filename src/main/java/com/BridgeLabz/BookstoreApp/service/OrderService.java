@@ -1,7 +1,9 @@
 package com.BridgeLabz.BookstoreApp.service;
 
+import com.BridgeLabz.BookstoreApp.dto.OrderDTO;
 import com.BridgeLabz.BookstoreApp.entity.Book;
 import com.BridgeLabz.BookstoreApp.entity.Order;
+import com.BridgeLabz.BookstoreApp.entity.User;
 import com.BridgeLabz.BookstoreApp.exception.BookException;
 import com.BridgeLabz.BookstoreApp.repository.BookRepository;
 import com.BridgeLabz.BookstoreApp.repository.OrderRepository;
@@ -27,44 +29,34 @@ public class OrderService implements IOrderService{
     @Autowired
     private UserRepository userRepository;
 
+    public Order insertOrder(OrderDTO orderDTO) {
+        Optional<Book> book = bookRepository.findById(orderDTO.getBookId());
+        Optional<User> user = userRepository.findById(orderDTO.getUserId());
+        if (book.isPresent() && user.isPresent()) {
+            if (orderDTO.getQuantity()<= book.get().getNoOfBooks()) {
+                int quantity = book.get().getNoOfBooks()-orderDTO.getQuantity();
+                book.get().setNoOfBooks(quantity);
+                bookRepository.save(book.get());
+                Order newOrder = new Order(book.get().getPrice(), orderDTO.getQuantity(), orderDTO.getAddress(), user.get(), book.get(), orderDTO.isCancel());
+                orderRepository.save(newOrder);
+                log.info("Order record inserted successfully");
+                return newOrder;
+            } else {
+                throw new BookException("Requested quantity is out of stock");
+            }
+        } else {
+            throw new BookException("Book or User doesn't exists");
+        }
+    }
+
     public List<Order> getAllOrderRecords() {
         List<Order> orderList = orderRepository.findAll();
         log.info("ALL order records retrieved successfully");
         return orderList;
     }
 
-    @Override
     public Order getOrderRecord(Integer id) {
-        return null;
-    }
-
-    @Override
-    public Order cancelOrder(Integer id) {
-        return null;
-    }
-
-//    public Order insertOrder(OrderDTO orderdto) {
-//        Optional<Book> book = bookRepository.findById(orderdto.getBookId());
-//        Optional<User> user = userRepository.findById(orderdto.getUserId());
-//        if (book.isPresent() && user.isPresent()) {
-//            if (orderdto.getQuantity()<= book.get().getQuantity()) {
-//                int quantity = book.get().getQuantity()-orderdto.getQuantity();
-//                book.get().setQuantity(quantity);
-//                bookRepo.save(book.get());
-//                Order newOrder = new Order(book.get().getPrice(), orderdto.getQuantity(), orderdto.getAddress(), book.get(), user.get(), orderdto.isCancel());
-//                orderRepo.save(newOrder);
-//                log.info("Order record inserted successfully");
-//                return newOrder;
-//            } else {
-//                throw new BookStoreException("Requested quantity is out of stock");
-//            }
-//        } else {
-//            throw new BookStoreException("Book or User doesn't exists");
-//        }
-//    }
-
-    public Order getOrderRecord(Long id) {
-        Optional<Order> order = orderRepository.findById(id);
+        Optional<Order> order = orderRepository.findById(Long.valueOf(id));
         if (order.isPresent()) {
             log.info("Order record retrieved successfully for id " + id);
             return order.get();
@@ -74,14 +66,14 @@ public class OrderService implements IOrderService{
         }
     }
 
-    public Order cancelOrder(Long id) {
-        Optional<Order> order = orderRepository.findById(id);
+    public Order cancelOrder(Integer id) {
+        Optional<Order> order = orderRepository.findById(Long.valueOf(id));
         if (order.isPresent()) {
             order.get().setCancel(true);
             Book book = order.get().getBook();
-            book.setQuantity(book.getQuantity() + order.get().getQuantity());
+            book.setNoOfBooks(book.getNoOfBooks() + order.get().getQuantity());
             bookRepository.save(book);
-            orderRepository.deleteById(id);
+            orderRepository.deleteById(Long.valueOf(id));
             log.info("Order record cancel successfully for id " + id);
             return order.get();
 
@@ -89,4 +81,5 @@ public class OrderService implements IOrderService{
             throw new BookException("Order Record doesn't exists");
         }
     }
+
 }

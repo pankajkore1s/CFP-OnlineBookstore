@@ -30,12 +30,12 @@ public class UserController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/getAll")
-//    public ResponseEntity<String> getAllUser() {
-//        List<User> listOfUsers = userService.getAllUsers();
-//        ResponseDTO dto = new ResponseDTO("User retrieved successfully (:",listOfUsers);
-//        return new ResponseEntity(dto,HttpStatus.OK);
-//    }
+    @GetMapping(value = "/getall")
+    public ResponseEntity<String> getAllUser() {
+        List<User> listOfUsers = userService.getAllUsers();
+        ResponseDTO dto = new ResponseDTO("User retrieved successfully (:",listOfUsers);
+        return new ResponseEntity(dto,HttpStatus.OK);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> addUserInBookStore(@RequestBody UserDTO userDTO){

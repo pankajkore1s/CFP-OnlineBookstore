@@ -6,9 +6,16 @@ import com.BridgeLabz.BookstoreApp.entity.Cart;
 
 public interface ICartService {
 
-    static abstract Cart insertItems(CartDTO cartdto);
+    Cart insertItems(CartDTO cartdto);
 
     ResponseDTO getCartDetails();
 
-      //Cart getCartDetailsById(Integer cartId);
+    Cart getCartDetailsById(Integer cartId);
+
+    Cart updateRecordById(Integer cartId, CartDTO cartDTO);
+
+    Cart getCartRecordByBookId(Integer bookID);
+
+    Cart deleteCartItemById(Integer cartId);
+
 }
