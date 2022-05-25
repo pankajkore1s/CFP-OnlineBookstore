@@ -10,7 +10,4 @@ public class CartDTO {
     @NonNull
     private Integer quantity;
 
-    public Integer getUserId() {
-        return getUserId();
-    }
 }

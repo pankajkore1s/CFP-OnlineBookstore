@@ -31,7 +31,7 @@ public class OrderService implements IOrderService{
 
     public Order insertOrder(OrderDTO orderDTO) {
         Optional<Book> book = bookRepository.findById(orderDTO.getBookId());
-        Optional<User> user = userRepository.findById(orderDTO.getUserId());
+        Optional<User> user = userRepository.findById(Math.toIntExact(orderDTO.getId()));
         if (book.isPresent() && user.isPresent()) {
             if (orderDTO.getQuantity()<= book.get().getNoOfBooks()) {
                 int quantity = book.get().getNoOfBooks()-orderDTO.getQuantity();
@@ -65,6 +65,46 @@ public class OrderService implements IOrderService{
             throw new BookException("Order Record doesn't exists");
         }
     }
+
+    public Order updateOrderRecord(Long id, OrderDTO orderDTO) {
+        Optional<Order> order = orderRepository.findById(id);
+        Optional<Book> book = bookRepository.findById(orderDTO.getBookId());
+        Optional<User> user = userRepository.findById(Math.toIntExact(orderDTO.getId()));
+        if (order.isPresent()) {
+            if (book.isPresent() && user.isPresent()) {
+                if (orderDTO.getQuantity() <= book.get().getNoOfBooks()) {
+                    int quantity = book.get().getNoOfBooks()-orderDTO.getQuantity();
+                    book.get().setNoOfBooks(quantity);
+                    bookRepository.save(book.get());
+                    Order newOrder = new Order(id, book.get().getPrice(), orderDTO.getQuantity(), orderDTO.getAddress(), book.get(), user.get(), orderDTO.isCancel());
+                    orderRepository.save(newOrder);
+                    log.info("Order record updated successfully for id " + id);
+                    return newOrder;
+                } else {
+                    throw new BookException("Requested quantity is not available");
+                }
+            } else {
+                throw new BookException("Book or User doesn't exists");
+
+            }
+
+        } else {
+            throw new BookException("Order Record doesn't exists");
+        }
+    }
+
+    public Order deleteOrderRecord(Long id) {
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isPresent()) {
+            orderRepository.deleteById(id);
+            log.info("Order record deleted successfully for id " + id);
+            return order.get();
+
+        } else {
+            throw new BookException("Order Record doesn't exists");
+        }
+    }
+
 
     public Order cancelOrder(Integer id) {
         Optional<Order> order = orderRepository.findById(Long.valueOf(id));

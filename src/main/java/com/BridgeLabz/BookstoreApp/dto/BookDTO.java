@@ -1,17 +1,19 @@
 package com.BridgeLabz.BookstoreApp.dto;
 
-import lombok.AllArgsConstructor;
+import com.sun.istack.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class BookDTO {
     private int bookId;
+    @NotNull
     private String bookDetails;
+    @NotNull
     private String authorName;
+    @NotNull
     private String bookName;
+    @NotNull
     private int price;
+    @NotNull
     private int noOfBooks;
 }

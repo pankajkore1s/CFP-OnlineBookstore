@@ -4,6 +4,7 @@ import com.BridgeLabz.BookstoreApp.dto.BookDTO;
 import com.BridgeLabz.BookstoreApp.entity.Book;
 import com.BridgeLabz.BookstoreApp.exception.BookException;
 import com.BridgeLabz.BookstoreApp.repository.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class BookService implements IBookService{
 
     @Autowired
-    private BookRepository bookRepository;
+    BookRepository bookRepository;
 
     @Override
     public Book createBook(BookDTO bookDTO) {
@@ -62,5 +64,35 @@ public class BookService implements IBookService{
             throw new BookException("Book record does not found");
         }
         return "data deleted successful";
+    }
+
+    @Override
+    public List<Book> getBookByName(String bookName) {
+        List<Book> findBook= bookRepository.findByBookName(bookName);
+        if(findBook.isEmpty()){
+            throw new BookException(" Details for provided Book is not found");
+        }
+        return findBook;
+    }
+
+    @Override
+    public List<Book> sortedListOfBooksInAscendingOrder() {
+        List<Book> getSortedList=  bookRepository.getSortedListOfBooksInAsc();
+        return getSortedList;
+    }
+
+    @Override
+    public List<Book> sortedListOfBooksInDescendingOrder() {
+        List<Book> getSortedListInDesc=  bookRepository.getSortedListOfBooksInDesc();
+        return getSortedListInDesc;
+    }
+
+    @Override
+    public List<Book> getBookByAuthorName(String authorName) {
+        List<Book> findBook= bookRepository.findByBookAuthorName(authorName);
+        if(findBook.isEmpty()){
+            throw new BookException(" Details for provided Book is not found");
+        }
+        return findBook;
     }
 }

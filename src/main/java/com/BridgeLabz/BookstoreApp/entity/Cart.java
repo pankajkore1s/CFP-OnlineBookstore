@@ -13,6 +13,7 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name="id")
     private User user;
+    @ManyToOne
     @JoinColumn(name="bookId")
     private Book book;
     private long quantity;

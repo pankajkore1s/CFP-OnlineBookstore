@@ -13,6 +13,10 @@ public interface IOrderService {
 
     public Order getOrderRecord(Integer id);
 
+    public Order updateOrderRecord(Long id, OrderDTO dto);
+
+    public Order deleteOrderRecord(Long id);
+
     public Order cancelOrder(Integer id);
 
 }

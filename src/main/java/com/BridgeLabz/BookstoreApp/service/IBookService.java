@@ -17,4 +17,11 @@ public interface IBookService {
 
     Book updateRecordById(Integer bookId, BookDTO bookDTO);
 
+    List<Book> getBookByName(String bookName);
+
+    List<Book> sortedListOfBooksInAscendingOrder();
+
+    List<Book> sortedListOfBooksInDescendingOrder();
+
+    List<Book> getBookByAuthorName(String authorName);
 }

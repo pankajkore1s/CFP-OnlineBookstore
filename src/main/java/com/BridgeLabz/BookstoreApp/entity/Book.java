@@ -1,7 +1,6 @@
 package com.BridgeLabz.BookstoreApp.entity;
 
 import com.BridgeLabz.BookstoreApp.dto.BookDTO;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +9,6 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(name="book")
 public class Book {
 
     @Id
@@ -23,11 +20,23 @@ public class Book {
     private int price;
     private int noOfBooks;
 
-    public Book(Integer bookId, BookDTO bookDTO) {
+    public Book(BookDTO bookDTO){
+        this.bookDetails=bookDTO.getBookDetails();
+        this.authorName=bookDTO.getAuthorName();
+        this.bookName=bookDTO.getBookName();
+        this.price=bookDTO.getPrice();
+        this.noOfBooks=bookDTO.getNoOfBooks();
+
+    }
+
+    public Book(int bookId, BookDTO bookDTO) {
+        this.bookId=bookId;
         this.bookDetails=bookDTO.getBookDetails();
         this.authorName=bookDTO.getAuthorName();
         this.bookName=bookDTO.getBookName();
         this.price=bookDTO.getPrice();
         this.noOfBooks=bookDTO.getNoOfBooks();
     }
+
+
 }

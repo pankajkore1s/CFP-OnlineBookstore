@@ -38,6 +38,13 @@ public class OrderController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
+    @PutMapping("/updateOrder/{id}")
+    public ResponseEntity<ResponseDTO> updateBookRecord(@PathVariable Long id, @RequestBody OrderDTO orderdto){
+        Order newOrder = orderService.updateOrderRecord(id,orderdto);
+        ResponseDTO dto = new ResponseDTO("Record updated successfully !",newOrder);
+        return new ResponseEntity(dto,HttpStatus.ACCEPTED);
+    }
+
     @GetMapping("/cancelOrder/{id}")
     public ResponseEntity<ResponseDTO> getCancelOrder(@PathVariable Integer id){
         Order deletedOrder = orderService.cancelOrder(id);

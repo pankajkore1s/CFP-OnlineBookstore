@@ -29,11 +29,11 @@ public class CartService implements ICartService {
     CartRepository cartRepository;
 
     @Override
-    public Cart insertItems(CartDTO cartdto) {
-        Optional<Book> book = bookRepository.findById(cartdto.getBookId());
-        Optional<User> user= userRepository.findById(cartdto.getUserId());
-        if (book.isPresent() && user.isPresent()) {
-            Cart newCart = new Cart(user.get(), book.get(), cartdto.getQuantity());
+    public Cart insertItems(CartDTO cartDTO) {
+        Optional<Book> book = bookRepository.findById(cartDTO.getBookId());
+        Optional<User> userRegistration = userRepository.findById(Math.toIntExact(cartDTO.getId()));
+        if (book.isPresent() && userRegistration.isPresent()) {
+            Cart newCart = new Cart(userRegistration.get(), book.get(), cartDTO.getQuantity());
             cartRepository.save(newCart);
             return newCart;
         } else {
@@ -66,7 +66,7 @@ public class CartService implements ICartService {
             return getCartData.get();
         }
         else {
-            throw new BookException(" Didn't find any record for this particular cartId");
+            throw new BookException(" Not found any record for this particular cartId");
         }
     }
 
@@ -100,7 +100,7 @@ public class CartService implements ICartService {
     public Cart updateRecordById(Integer cartId, CartDTO cartDTO) {
         Optional<Cart> cart = cartRepository.findById(cartId);
         Optional<Book>  book = bookRepository.findById(cartDTO.getBookId());
-        Optional<User> user = userRepository.findById(cartDTO.getUserId());
+        Optional<User> user = userRepository.findById(Math.toIntExact(cartDTO.getId()));
         if(cart.isPresent()) {
             if(book.isPresent() && user.isPresent()) {
                 Cart newCart = new Cart(cartId, user.get(),book.get(), cartDTO.getQuantity());

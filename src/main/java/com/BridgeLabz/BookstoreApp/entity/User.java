@@ -2,13 +2,14 @@ package com.BridgeLabz.BookstoreApp.entity;
 
 import com.BridgeLabz.BookstoreApp.dto.UserDTO;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Data
-@Table(name="users")
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -22,9 +23,6 @@ public class User {
     private LocalDate updatedDate;
     private String email;
     private String password;
-
-    public User() {
-    }
 
     public User(UserDTO userDTO) {
         this.id = getId();
@@ -74,4 +72,7 @@ public class User {
     }
 
 
+    public String getFirstName() {
+        return firstname;
+    }
 }

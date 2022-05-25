@@ -20,6 +20,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name="id")
     private User user;
+    @ManyToOne
     @JoinColumn(name="bookId")
     private Book book;
     private boolean cancel;
@@ -44,5 +45,17 @@ public class Order {
         this.user = user;
         this.book = book;
         this.cancel = cancel;
+    }
+
+    public Order(Long id, Integer price, Integer quantity, String address, Book book, User user, boolean cancel) {
+        this.orderID=getOrderID();
+        this.price = price;
+        this.quantity = quantity;
+        this.address = address;
+        this.user = user;
+        this.book = book;
+        this.cancel = cancel;
+
+
     }
 }

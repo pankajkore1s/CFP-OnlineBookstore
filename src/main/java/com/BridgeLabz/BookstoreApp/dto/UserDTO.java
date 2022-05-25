@@ -1,14 +1,11 @@
 package com.BridgeLabz.BookstoreApp.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDate;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserDTO {
 
     private long id;
@@ -18,6 +15,7 @@ public class UserDTO {
     private LocalDate dob;
     private LocalDate registeredDate;
     private LocalDate updatedDate;
+    @Email
     private String email;
     private String password;
 }
